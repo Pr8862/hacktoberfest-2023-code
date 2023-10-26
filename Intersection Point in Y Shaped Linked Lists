@@ -1,0 +1,64 @@
+Given two singly linked lists of size N and M, write a program to get the point where two linked lists intersect each other.
+
+ 
+
+Example 1:
+
+Input:
+LinkList1 = 3->6->9->common
+LinkList2 = 10->common
+common = 15->30->NULL
+Output: 15
+
+
+
+class ListNode:
+    def __init__(self, val):
+        self.val = val
+        self.next = None
+
+def getIntersectionNode(headA, headB):
+    # Calculate the lengths of both linked lists
+    lenA, lenB = 0, 0
+    currA, currB = headA, headB
+    while currA:
+        lenA += 1
+        currA = currA.next
+    while currB:
+        lenB += 1
+        currB = currB.next
+    
+    # Reset the pointers to the beginning
+    currA, currB = headA, headB
+    
+    # Traverse the longer linked list by diff nodes
+    if lenA > lenB:
+        for _ in range(lenA - lenB):
+            currA = currA.next
+    elif lenB > lenA:
+        for _ in range(lenB - lenA):
+            currB = currB.next
+    
+    # Traverse both linked lists to find the intersection point
+    while currA != currB:
+        currA = currA.next
+        currB = currB.next
+    
+    return currA  # Return the intersection node
+
+# Example usage:
+# Create the linked lists
+common = ListNode(15)
+common.next = ListNode(30)
+list1 = ListNode(3)
+list1.next = ListNode(6)
+list1.next.next = ListNode(9)
+list1.next.next.next = common
+list2 = ListNode(10)
+list2.next = common
+
+intersection_node = getIntersectionNode(list1, list2)
+if intersection_node:
+    print("Intersection Point:", intersection_node.val)
+else:
+    print("No intersection found")
